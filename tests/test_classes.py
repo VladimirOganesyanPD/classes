@@ -1,4 +1,5 @@
 import pytest
+
 from classes import Category, Product
 
 
@@ -16,32 +17,31 @@ def setup_products():
     return product1, product2
 
 
-def test_category_initialization():
+def test_add_product():
     category = Category("Electronics", "Electronics category")
-    assert category.name == "Electronics"
-    assert category.description == "Electronics category"
-    assert category.products == []
-
-
-def test_product_initialization():
     product = Product("Laptop", "Laptop description", 1000.50, 10)
+    category.add_product(product)
+    assert len(category._Category__products) == 1
+
+
+def test_product_list_format(setup_categories, setup_products):
+    category1, _ = setup_categories
+    product1, _ = setup_products
+
+    category1.add_product(product1)
+    expected_output = f"{product1.name}, {product1.price} руб. Остаток: {product1.quantity} шт.\n"
+    assert category1.products == expected_output
+
+
+def test_create_product():
+    product = Product.create_product("Laptop", "Laptop description", 1000.50, 10)
     assert product.name == "Laptop"
     assert product.description == "Laptop description"
     assert product.price == 1000.50
     assert product.quantity == 10
 
 
-def test_product_count(setup_categories, setup_products):
-    category1, category2 = setup_categories
-    product1, product2 = setup_products
-
-    category1.products.append(product1)
-    category2.products.append(product2)
-
-    assert Category.total_unique_products == 3
-
-
-def test_category_count(setup_categories):
-    category1, category2 = setup_categories
-
-    assert Category.total_categories == 5
+def test_price_setter():
+    product = Product("Laptop", "Laptop description", 1000.50, 10)
+    product.price = -500  # Пытаемся установить некорректную цену
+    assert product.price == 1000.50  # Цена не изменилась из-за некорректного ввода
