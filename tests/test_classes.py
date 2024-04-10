@@ -34,7 +34,7 @@ def test_product_list_format(setup_categories, setup_products):
 
 
 def test_create_product():
-    product = Product.create_product("Laptop", "Laptop description", 1000.50, 10)
+    product = Product("Laptop", "Laptop description", 1000.50, 10)
     assert product.name == "Laptop"
     assert product.description == "Laptop description"
     assert product.price == 1000.50
@@ -45,3 +45,24 @@ def test_price_setter():
     product = Product("Laptop", "Laptop description", 1000.50, 10)
     product.price = -500  # Пытаемся установить некорректную цену
     assert product.price == 1000.50  # Цена не изменилась из-за некорректного ввода
+
+
+def test_str_method_product():
+    product = Product("Laptop", "Laptop description", 1000.50, 10)
+    expected_output = "Laptop, 1000.5 руб. Остаток: 10 шт."
+    assert str(product) == expected_output
+
+
+def test_str_method_category():
+    category = Category("Electronics", "Electronics category")
+    product = Product("Laptop", "Laptop description", 1000.50, 10)
+    category.add_product(product)
+    expected_output = "Electronics, количество продуктов: 1 шт."
+    assert str(category) == expected_output
+
+
+def test_add_method_product():
+    product1 = Product("Laptop", "Laptop description", 1000.50, 10)
+    product2 = Product("Phone", "Phone description", 800.75, 20)
+    total_value = product1 + product2
+    assert total_value == (1000.50 * 10) + (800.75 * 20)

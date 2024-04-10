@@ -1,3 +1,32 @@
+class Product:
+    def __init__(self, name, description, price, quantity):
+        self.name = name
+        self.description = description
+        self.__price = price
+        self.quantity = quantity
+        Category.total_unique_products += 1
+
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, value):
+        if value <= 0:
+            print("Ошибка: цена введена некорректно.")
+        else:
+            self.__price = value
+
+    def __str__(self):
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        if isinstance(other, Product):
+            return self.__price * self.quantity + other.__price * other.quantity
+        else:
+            return NotImplemented
+
+
 class Category:
     total_categories = 0
     total_unique_products = 0
@@ -6,44 +35,37 @@ class Category:
         self._Category__products = None
         self.name = name
         self.description = description
-        self.__products = []  # Приватный атрибут для списка товаров
+        self.__products = []
         Category.total_categories += 1
 
     def add_product(self, product):
-        """Метод для добавления товара в список товаров."""
         self.__products.append(product)
 
     @property
     def products(self):
-        """Геттер для атрибута 'товары'."""
         product_list = ""
         for product in self.__products:
-            product_list += f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
+            product_list += str(product) + "\n"
         return product_list
 
+    def __str__(self):
+        return f"{self.name}, количество продуктов: {len(self.__products)} шт."
 
-class Product:
-    def __init__(self, name, description, price, quantity):
-        self.name = name
-        self.description = description
-        self.__price = price  # Приватный атрибут цены
-        self.quantity = quantity
-        Category.total_unique_products += 1
 
-    @classmethod
-    def create_product(cls, name, description, price, quantity):
-        """Метод класса для создания товара."""
-        return cls(name, description, price, quantity)
+# Добавил пример работы классов
+if __name__ == "__main__":
+    # Создаем категорию и несколько товаров
+    category = Category("Electronics", "Electronics category")
+    laptop = Product("Laptop", "Laptop description", 1000.50, 10)
+    phone = Product("Phone", "Phone description", 800.75, 20)
 
-    @property
-    def price(self):
-        """Геттер для атрибута 'цена'."""
-        return self.__price
+    # Добавляем товары в категорию
+    category.add_product(laptop)
+    category.add_product(phone)
 
-    @price.setter
-    def price(self, value):
-        """Сеттер для атрибута 'цена' с проверкой на корректность."""
-        if value <= 0:
-            print("Ошибка: цена введена некорректно.")
-        else:
-            self.__price = value
+    # Выводим информацию о категории и ее товарах
+    print(category)
+    print(category.products)
+
+    total_value = laptop + phone
+    print("Общая стоимость товаров:", total_value)
