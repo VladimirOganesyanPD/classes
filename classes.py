@@ -1,10 +1,12 @@
 class Product:
+    total_unique_products = 0
+
     def __init__(self, name, description, price, quantity):
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
-        Category.total_unique_products += 1
+        Product.total_unique_products += 1
 
     @property
     def price(self):
@@ -21,24 +23,40 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        if isinstance(other, Product):
-            return self.__price * self.quantity + other.__price * other.quantity
-        else:
-            return NotImplemented
+        if not isinstance(other, Product):
+            raise TypeError("Нельзя складывать продукты разных классов.")
+        return self.price * self.quantity + other.price * other.quantity
+
+
+class Smartphone(Product):
+    def __init__(self, name, description, price, quantity, performance, model, memory, color):
+        super().__init__(name, description, price, quantity)
+        self.performance = performance
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class Grass(Product):
+    def __init__(self, name, description, price, quantity, country, sprouting_period, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.sprouting_period = sprouting_period
+        self.color = color
 
 
 class Category:
     total_categories = 0
-    total_unique_products = 0
 
     def __init__(self, name, description):
-        self._Category__products = None
+        self._Category__products = []
         self.name = name
         self.description = description
-        self.__products = []
         Category.total_categories += 1
 
     def add_product(self, product):
+        if not isinstance(product, Product):
+            raise TypeError("Можно добавлять только объекты типа Product или его наследники.")
         self.__products.append(product)
 
     @property
@@ -56,16 +74,17 @@ class Category:
 if __name__ == "__main__":
     # Создаем категорию и несколько товаров
     category = Category("Electronics", "Electronics category")
-    laptop = Product("Laptop", "Laptop description", 1000.50, 10)
-    phone = Product("Phone", "Phone description", 800.75, 20)
+    smartphone = Smartphone("Smartphone", "Smartphone description", 1000.50, 10, "High", "Model X", "128GB", "Black")
+    grass = Grass("Grass", "Grass description", 10.75, 100, "Russia", "14 days", "Green")
 
     # Добавляем товары в категорию
-    category.add_product(laptop)
-    category.add_product(phone)
+    category.add_product(smartphone)
+    category.add_product(grass)
 
     # Выводим информацию о категории и ее товарах
     print(category)
     print(category.products)
 
-    total_value = laptop + phone
+    # Проверяем функционал сложения
+    total_value = smartphone + grass
     print("Общая стоимость товаров:", total_value)
