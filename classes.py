@@ -27,6 +27,11 @@ class Product:
             raise TypeError("Нельзя складывать продукты разных классов.")
         return self.price * self.quantity + other.price * other.quantity
 
+    def add(self, other):
+        if not isinstance(other, Product):
+            raise TypeError("Нельзя складывать продукты разных классов.")
+        return self + other
+
 
 class Smartphone(Product):
     def __init__(self, name, description, price, quantity, performance, model, memory, color):
@@ -36,6 +41,11 @@ class Smartphone(Product):
         self.memory = memory
         self.color = color
 
+    def add(self, other):
+        if not isinstance(other, Smartphone):
+            raise TypeError("Нельзя складывать продукты разных классов.")
+        return self + other
+
 
 class Grass(Product):
     def __init__(self, name, description, price, quantity, country, sprouting_period, color):
@@ -44,12 +54,17 @@ class Grass(Product):
         self.sprouting_period = sprouting_period
         self.color = color
 
+    def add(self, other):
+        if not isinstance(other, Grass):
+            raise TypeError("Нельзя складывать продукты разных классов.")
+        return self + other
+
 
 class Category:
     total_categories = 0
 
     def __init__(self, name, description):
-        self._Category__products = []
+        self.__products = []
         self.name = name
         self.description = description
         Category.total_categories += 1
