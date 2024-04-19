@@ -12,6 +12,16 @@ class AbstractProduct(ABC):
     def some_common_method(self):
         pass
 
+    def __str__(self):
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    # Добавил несколько общих методов
+    def increase_quantity(self, amount):
+        self.quantity += amount
+
+    def decrease_quantity(self, amount):
+        self.quantity -= amount
+
 
 class ObjectCreationMixin:
     def __repr__(self):

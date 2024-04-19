@@ -16,7 +16,8 @@ def setup_products():
     product2 = Product("Book", "Book description", 20.99, 50)
     return product1, product2
 
-# След. два теста(прайс сеттер и стринговый метод продукта работают некорректно , не понимаю почему. Я написал как смог.
+
+# След. два теста(прайс сеттер и метод продукта работают некорректно , не понимаю почему. Я написал как смог.
 def test_price_setter():
     product = Product("Laptop", "Laptop description", 1000.50, 10)
     original_price = product.price
