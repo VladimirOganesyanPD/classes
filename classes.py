@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-
 class AbstractProduct(ABC):
     def __init__(self, name, description, price, quantity):
         self.name = name
@@ -12,10 +11,6 @@ class AbstractProduct(ABC):
     def some_common_method(self):
         pass
 
-    def __str__(self):
-        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
-
-    # Добавил несколько общих методов
     def increase_quantity(self, amount):
         self.quantity += amount
 
@@ -23,16 +18,7 @@ class AbstractProduct(ABC):
         self.quantity -= amount
 
 
-class ObjectCreationMixin:
-    def __repr__(self):
-        attributes = ', '.join(f'{key}={value}' for key, value in self.__dict__.items())
-        return f'{self.__class__.__name__}({attributes})'
-
-
-class Product(AbstractProduct, ObjectCreationMixin):
-    def __init__(self, name, description, price, quantity):
-        super().__init__(name, description, price, quantity)
-
+class Product(AbstractProduct):
     def some_common_method(self):
         pass
 
@@ -40,7 +26,7 @@ class Product(AbstractProduct, ObjectCreationMixin):
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
 
-class Smartphone(AbstractProduct, ObjectCreationMixin):
+class Smartphone(Product):
     def __init__(self, name, description, price, quantity, performance, model, memory, color):
         super().__init__(name, description, price, quantity)
         self.performance = performance
@@ -55,7 +41,7 @@ class Smartphone(AbstractProduct, ObjectCreationMixin):
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт. Performance: {self.performance}, Model: {self.model}, Memory: {self.memory}, Color: {self.color}"
 
 
-class Grass(AbstractProduct, ObjectCreationMixin):
+class Grass(Product):
     def __init__(self, name, description, price, quantity, country, sprouting_period, color):
         super().__init__(name, description, price, quantity)
         self.country = country
