@@ -1,11 +1,21 @@
 from abc import ABC, abstractmethod
 
-class AbstractProduct(ABC):
+
+class CreationInfoMixin:
+    def __repr__(self):
+        attrs = ', '.join(f"{attr}={getattr(self, attr)!r}" for attr in self.__dict__)
+        return f"{type(self).__name__}({attrs})"
+
+
+class AbstractProduct(ABC, CreationInfoMixin):
     def __init__(self, name, description, price, quantity):
         self.name = name
         self.description = description
         self.price = price
         self.quantity = quantity
+        print(f"Object of class {type(self).__name__} created with attributes:")
+        for attr, value in self.__dict__.items():
+            print(f"{attr}: {value}")
 
     @abstractmethod
     def some_common_method(self):
@@ -63,6 +73,9 @@ class Category:
         self.name = name
         self.description = description
         Category.total_categories += 1
+        print(f"Object of class {type(self).__name__} created with attributes:")
+        for attr, value in self.__dict__.items():
+            print(f"{attr}: {value}")
 
     def add_product(self, product):
         if not isinstance(product, AbstractProduct):
@@ -90,5 +103,3 @@ if __name__ == "__main__":
 
     print(category)
     print(category.products)
-    print(smartphone)
-    print(grass)
