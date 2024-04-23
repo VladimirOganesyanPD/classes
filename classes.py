@@ -80,6 +80,8 @@ class Category:
     def add_product(self, product):
         if not isinstance(product, AbstractProduct):
             raise TypeError("Можно добавлять только объекты типа AbstractProduct или его наследники.")
+        if product.quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен.")
         self.__products.append(product)
 
     @property
@@ -89,17 +91,31 @@ class Category:
             product_list += str(product) + "\n"
         return product_list
 
+    def calculate_average_price(self):
+        try:
+            total_price = sum(product.price for product in self.__products)
+            average_price = total_price / len(self.__products)
+        except ZeroDivisionError:
+            return 0
+        return average_price
+
     def __str__(self):
         return f"{self.name}, количество продуктов: {len(self.__products)} шт."
 
 
 if __name__ == "__main__":
     category = Category("Electronics", "Electronics category")
-    smartphone = Smartphone("Smartphone", "Smartphone description", 1000.50, 10, "High", "Model X", "128GB", "Black")
+    smartphone = Smartphone("Smartphone", "Smartphone description", 1000.50, 0, "High", "Model X", "128GB", "Black")
     grass = Grass("Grass", "Grass description", 10.75, 100, "Russia", "14 days", "Green")
 
-    category.add_product(smartphone)
+    try:
+        category.add_product(smartphone)
+    except ValueError as e:
+        print(e)
+
     category.add_product(grass)
 
     print(category)
     print(category.products)
+
+    print("Average Price:", category.calculate_average_price())
